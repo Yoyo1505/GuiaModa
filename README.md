@@ -1,1 +1,193 @@
 # GuiaModa
+```java
+import com.itextpdf.kernel.colors.Color;
+import com.itextpdf.kernel.colors.DeviceRgb;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Text;
+import com.itextpdf.layout.property.TextAlignment;
+import com.itextpdf.layout.property.VerticalAlignment;
+import com.itextpdf.kernel.geom.PageSize;
+
+public class MensColorTextureGuide {
+    // Define custom colors
+    private static final Color NAVY_BLUE = new DeviceRgb(0, 38, 77);
+    private static final Color OLIVE_GREEN = new DeviceRgb(85, 107, 47);
+    private static final Color BURGUNDY = new DeviceRgb(128, 0, 32);
+    private static final Color MUSTARD = new DeviceRgb(204, 153, 0);
+    private static final Color TERRACOTTA = new DeviceRgb(204, 78, 92);
+    private static final Color LIGHT_BEIGE = new DeviceRgb(245, 245, 220);
+    private static final Color CREMA = new DeviceRgb(255, 245, 238);
+    private static final Color LIGHT_GREY = new DeviceRgb(211, 211, 211);
+
+    public static void main(String[] args) {
+        try {
+            // Initialize PDF writer and document
+            PdfWriter writer = new PdfWriter("mens_color_texture_guide.pdf");
+            PdfDocument pdf = new PdfDocument(writer);
+            Document document = new Document(pdf, PageSize.A4);
+            document.setMargins(20, 20, 20, 20);
+
+            // Title
+            document.add(new Paragraph("Guía de Combinación de Colores y Texturas para Hombre")
+                    .setFontSize(16)
+                    .setBold()
+                    .setTextAlignment(TextAlignment.CENTER)
+                    .setMarginBottom(10));
+
+            // Introduction
+            document.add(new Paragraph("Introducción").setFontSize(12).setBold());
+            document.add(new Paragraph(
+                    "Esta guía está diseñada para ayudarte a combinar colores y texturas de manera efectiva en tu vestimenta. " +
+                    "Explora los colores base, sus combinaciones compatibles y las texturas ideales para diferentes estilos y ocasiones. " +
+                    "Cada tabla incluye recomendaciones prácticas para lograr un look sofisticado y coherente.")
+                    .setFontSize(10)
+                    .setMarginBottom(10));
+
+            // Color Base Table
+            document.add(new Paragraph("Cuadro de Colores Base").setFontSize(12).setBold());
+            Table colorTable = new Table(new float[]{4, 2, 8}); // Column widths in cm
+            colorTable.setWidth(PageSize.A4.getWidth() - 40); // Fit to page with margins
+            colorTable.addHeaderCell(new Cell().add(new Paragraph("Color").setBold()).setBackgroundColor(LIGHT_GREY));
+            colorTable.addHeaderCell(new Cell().add(new Paragraph("Muestra").setBold()).setBackgroundColor(LIGHT_GREY));
+            colorTable.addHeaderCell(new Cell().add(new Paragraph("Descripción").setBold()).setBackgroundColor(LIGHT_GREY));
+
+            // Color data
+            String[][] colorData = {
+                    {"Azul marino", "Elegante y versátil, ideal para entornos formales y casuales."},
+                    {"Verde oliva", "Cálido y terroso, perfecto para looks otoñales."},
+                    {"Burdeos", "Sofisticado, añade profundidad a atuendos formales."},
+                    {"Mostaza", "Vibrante, ideal para destacar en looks casuales."},
+                    {"Terracota", "Cálido y moderno, combina bien con tonos neutros."},
+                    {"Gris", "Neutro y flexible, combina con casi todo."},
+                    {"Negro", "Clásico, ideal para looks formales y minimalistas."},
+                    {"Blanco", "Fresco y limpio, perfecto para verano o contrastes."},
+                    {"Beige", "Suave y neutro, ideal para looks relajados."}
+            };
+            Color[] colors = {NAVY_BLUE, OLIVE_GREEN, BURGUNDY, MUSTARD, TERRACOTTA, 
+                              DeviceRgb.GRAY, DeviceRgb.BLACK, DeviceRgb.WHITE, LIGHT_BEIGE};
+
+            for (int i = 0; i < colorData.length; i++) {
+                colorTable.addCell(new Cell().add(new Paragraph(colorData[i][0]).setBold())
+                        .setVerticalAlignment(VerticalAlignment.MIDDLE));
+                Cell swatchCell = new Cell().setHeight(14).setVerticalAlignment(VerticalAlignment.MIDDLE);
+                if (colors[i] == DeviceRgb.WHITE) {
+                    swatchCell.setBorderColor(DeviceRgb.BLACK).setBackgroundColor(DeviceRgb.WHITE);
+                } else {
+                    swatchCell.setBackgroundColor(colors[i]);
+                }
+                colorTable.addCell(swatchCell);
+                colorTable.addCell(new Cell().add(new Paragraph(colorData[i][1]))
+                        .setVerticalAlignment(VerticalAlignment.MIDDLE));
+            }
+            colorTable.setBorder(com.itextpdf.kernel.colors.DeviceGray.BLACK);
+            document.add(colorTable);
+            document.add(new Paragraph("").setMarginBottom(10));
+
+            // Color and Texture Combination Table
+            document.add(new Paragraph("Combinación de Colores y Texturas").setFontSize(12).setBold());
+            Table comboTable = new Table(new float[]{3, 5, 5});
+            comboTable.setWidth(PageSize.A4.getWidth() - 40);
+            comboTable.addHeaderCell(new Cell().add(new Paragraph("Color Base").setBold()).setBackgroundColor(LIGHT_GREY));
+            comboTable.addHeaderCell(new Cell().add(new Paragraph("Colores Compatibles").setBold()).setBackgroundColor(LIGHT_GREY));
+            comboTable.addHeaderCell(new Cell().add(new Paragraph("Texturas Recomendadas").setBold()).setBackgroundColor(LIGHT_GREY));
+
+            String[][] comboData = {
+                    {"Azul marino", "Blanco, gris, beige, mostaza, terracota", "Algodón, lino, denim, franela, lana"},
+                    {"Verde oliva", "Beige, negro, terracota, crema, burdeos", "Pana, algodón, gamuza, tejido de punto"},
+                    {"Burdeos", "Gris, azul marino, beige, blanco, crema", "Lana, algodón, piel, cachemir"},
+                    {"Mostaza", "Azul marino, verde oliva, blanco, marrón", "Lino, algodón, pana, denim"},
+                    {"Terracota", "Azul, blanco, caqui, gris claro, crema", "Algodón, pana, lino, gamuza"},
+                    {"Gris", "Azul, blanco, negro, mostaza, verde oscuro", "Lana, algodón, franela, cachemir"},
+                    {"Negro", "Blanco, gris, burdeos, tonos metálicos", "Piel, algodón, denim, lana"}
+            };
+            for (String[] row : comboData) {
+                comboTable.addCell(new Cell().add(new Paragraph(row[0]).setBold()).setVerticalAlignment(VerticalAlignment.MIDDLE));
+                comboTable.addCell(new Cell().add(new Paragraph(row[1])).setVerticalAlignment(VerticalAlignment.MIDDLE));
+                comboTable.addCell(new Cell().add(new Paragraph(row[2])).setVerticalAlignment(VerticalAlignment.MIDDLE));
+            }
+            comboTable.setBorder(com.itextpdf.kernel.colors.DeviceGray.BLACK);
+            document.add(comboTable);
+            document.add(new Paragraph("").setMarginBottom(10));
+
+            // Texture Characteristics Table
+            document.add(new Paragraph("Características de Texturas Comunes").setFontSize(12).setBold());
+            Table textureTable = new Table(new float[]{3, 5, 5});
+            textureTable.setWidth(PageSize.A4.getWidth() - 40);
+            textureTable.addHeaderCell(new Cell().add(new Paragraph("Textura").setBold()).setBackgroundColor(LIGHT_GREY));
+            textureTable.addHeaderCell(new Cell().add(new Paragraph("Estilo que Transmite").setBold()).setBackgroundColor(LIGHT_GREY));
+            textureTable.addHeaderCell(new Cell().add(new Paragraph("Uso Ideal en Prendas").setBold()).setBackgroundColor(LIGHT_GREY));
+
+            String[][] textureData = {
+                    {"Algodón", "Natural, versátil, transpirable", "Camisetas, polos, camisas, pantalones"},
+                    {"Lino", "Ligero, fresco, elegante", "Camisas, pantalones, blazers, trajes de verano"},
+                    {"Pana", "Retro, cálida, texturada", "Pantalones, chaquetas, camisas"},
+                    {"Tejido de punto", "Casual, acogedor, flexible", "Suéteres, polos, bufandas"},
+                    {"Denim", "Resistente, urbano, atemporal", "Jeans, chaquetas, camisas"},
+                    {"Gamuza", "Sofisticado, suave, lujoso", "Zapatos, chaquetas, accesorios"},
+                    {"Piel (cuero)", "Formal, audaz, duradero", "Zapatos, cinturones, chamarras"},
+                    {"Franela", "Cálida, texturada, acogedora", "Camisas, sobrecamisas, chaquetas"}
+            };
+            for (String[] row : textureData) {
+                textureTable.addCell(new Cell().add(new Paragraph(row[0]).setBold()).setVerticalAlignment(VerticalAlignment.MIDDLE));
+                textureTable.addCell(new Cell().add(new Paragraph(row[1])).setVerticalAlignment(VerticalAlignment.MIDDLE));
+                textureTable.addCell(new Cell().add(new Paragraph(row[2])).setVerticalAlignment(VerticalAlignment.MIDDLE));
+            }
+            textureTable.setBorder(com.itextpdf.kernel.colors.DeviceGray.BLACK);
+            document.add(textureTable);
+            document.add(new Paragraph("").setMarginBottom(10));
+
+            // Abstract Combinations Table
+            document.add(new Paragraph("Combinaciones Abstractas").setFontSize(12).setBold());
+            Table abstractTable = new Table(new float[]{3.5f, 2.5f, 3, 2.5f, 5});
+            abstractTable.setWidth(PageSize.A4.getWidth() - 40);
+            abstractTable.addHeaderCell(new Cell().add(new Paragraph("Textura Superior").setBold()).setBackgroundColor(LIGHT_GREY));
+            abstractTable.addHeaderCell(new Cell().add(new Paragraph("Color Superior").setBold()).setBackgroundColor(LIGHT_GREY));
+            abstractTable.addHeaderCell(new Cell().add(new Paragraph("Textura Inferior").setBold()).setBackgroundColor(LIGHT_GREY));
+            abstractTable.addHeaderCell(new Cell().add(new Paragraph("Color Inferior").setBold()).setBackgroundColor(LIGHT_GREY));
+            abstractTable.addHeaderCell(new Cell().add(new Paragraph("Complementos").setBold()).setBackgroundColor(LIGHT_GREY));
+
+            String[][] abstractData = {
+                    {"Lino", "Azul claro", "Pana", "Terracota", "Mocasines de gamuza, cinturón de cuero, reloj dorado"},
+                    {"Algodón", "Blanco", "Denim", "Azul oscuro", "Tenis blancos, reloj metálico, lentes de sol"},
+                    {"Franela", "Verde oliva", "Algodón liso", "Crema", "Botines marrón, bufanda de lana, sombrero"},
+                    {"Piqué (polo)", "Mostaza", "Lino", "Beige claro", "Mocasines, cinturón de cuero, lentes polarizados"},
+                    {"Punto fino", "Burdeos", "Gabardina", "Gris claro", "Zapatos derby, cinturón negro, bufanda ligera"}
+            };
+            for (String[] row : abstractData) {
+                abstractTable.addCell(new Cell().add(new Paragraph(row[0]).setBold()).setVerticalAlignment(VerticalAlignment.MIDDLE));
+                abstractTable.addCell(new Cell().add(new Paragraph(row[1])).setVerticalAlignment(VerticalAlignment.MIDDLE));
+                abstractTable.addCell(new Cell().add(new Paragraph(row[2])).setVerticalAlignment(VerticalAlignment.MIDDLE));
+                abstractTable.addCell(new Cell().add(new Paragraph(row[3])).setVerticalAlignment(VerticalAlignment.MIDDLE));
+                abstractTable.addCell(new Cell().add(new Paragraph(row[4])).setVerticalAlignment(VerticalAlignment.MIDDLE));
+            }
+            abstractTable.setBorder(com.itextpdf.kernel.colors.DeviceGray.BLACK);
+            document.add(abstractTable);
+            document.add(new Paragraph("").setMarginBottom(10));
+
+            // Practical Tips
+            document.add(new Paragraph("Consejos Prácticos").setFontSize(12).setBold());
+            document.add(new Paragraph("• Balance de colores: Usa colores neutros (gris, blanco, negro) como base y añade un toque de color vibrante (mostaza, burdeos) para destacar.")
+                    .setFontSize(10));
+            document.add(new Paragraph("• Contraste de texturas: Combina texturas suaves (algodón, lino) con texturas más pesadas (pana, cuero) para mayor interés visual.")
+                    .setFontSize(10));
+            document.add(new Paragraph("• Ocasión: Reserva colores oscuros y texturas formales (lana, piel) para eventos nocturnos o formales, y colores claros con lino o algodón para el día.")
+                    .setFontSize(10));
+            document.add(new Paragraph("• Accesorios: Los accesorios (relojes, cinturones, bufandas) deben complementar el color base y añadir un toque de personalidad.")
+                    .setFontSize(10));
+
+            // Close the document
+            document.close();
+            System.out.println("PDF generated successfully: mens_color_texture_guide.pdf");
+
+        } catch (Exception e) {
+            System.err.println("Error generating PDF: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+}
+```
